@@ -7,9 +7,9 @@ public:
         int m = pattern.size();
         int count = 0;
 
-        for (int i = 0; i <= n; i++) {  // Adjusted loop condition
+        for (int i = 0; i < n; i++) {  // Adjusted loop condition
             bool f = false;  // Moved inside the loop
- if(i+m>=n)
+            if(i+m>=n)
                 break;
             for (int k = 0; k < m; k++) {  // Adjusted loop condition
                 if (pattern[k] == 1) {
