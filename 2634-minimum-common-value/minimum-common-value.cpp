@@ -10,7 +10,7 @@ public:
             if(maps.find(nums2[i]) != maps.end()) {
                 return nums2[i];
             }
-}
+        }
         return -1;
     }
 };
