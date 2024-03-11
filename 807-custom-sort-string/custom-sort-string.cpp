@@ -3,31 +3,26 @@
 class Solution {
 public:
     string customSortString(string order, string s) {
-        vector<int> arr2(128, 0); 
-        for (int i = 0; i < s.size(); i++) {
-            arr2[s[i]]++;
+        unordered_map<char,int>maps1;
+        for (char c : s) {
+            maps1[c]++;
         }
 
-        int i = 0;
-        int j = 0;
-        string ans = "";
-
-        while (i < order.size()) {
-            if (arr2[order[i]] != 0) {
-                ans += order[i];
-                arr2[order[i]]--;
-            } else {
-                i++;
+        int i =0;
+        string ans="";
+        while(i<order.size()){
+            if(maps1[order[i]]!=0){
+                ans+=order[i];
+                maps1[order[i]]--;
+            }
+            else i++;
+        }
+        for(auto p : maps1){
+            while(p.second!=0){
+                ans+=p.first;
+                p.second--;
             }
         }
-
-        for (int i = 0; i < 128; i++) { 
-            while (arr2[i] > 0) {
-                ans += char(i);
-                arr2[i]--;
-            }
-        }
-
         return ans;
     }
 };
