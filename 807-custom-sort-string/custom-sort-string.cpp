@@ -9,7 +9,6 @@ public:
         }
 
         int i = 0;
-        int j = 0;
         string ans = "";
 
         while (i < order.size()) {
