@@ -15,11 +15,10 @@ public:
             count++;
             for (int j = i + 1; j < n; j++) {
                 if (points[j][0] <= end) {
-                    // Update end to the minimum of the current end and the end of the overlapping interval
                     end = min(end, points[j][1]);
                     i++;
                 } else {
-                    break; // No more overlapping intervals
+                    break; 
                 }
             }
             i++;
