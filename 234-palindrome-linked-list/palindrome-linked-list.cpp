@@ -16,30 +16,29 @@ public:
         while(cur){
             ListNode* temp = cur->next;
             cur->next = prev;
-            prev= cur;
-            cur= temp;
+            prev = cur;
+            cur = temp;
         }
         return prev;
     }
-    
     bool isPalindrome(ListNode* head) {
-        int n=0;
-        ListNode* temp =head;
+        int n =0;
+        ListNode* temp = head;
         while(temp!=NULL){
-            n++;
+             n++;
+
             temp = temp->next;
         }
-        temp = head;
         n = n/2;
+        temp =head;
         while(n){
-            temp = temp->next;
+            temp=temp->next;
             n--;
         }
-        ListNode* newhead= reverse(temp);
-        temp->next = NULL;
-        while(newhead!=NULL && head!=NULL){
-            if(newhead->val != head->val) return false;
-            newhead = newhead->next;
+        ListNode* newnode = reverse(temp);
+        while(newnode!=NULL && head!=NULL){
+            if(newnode->val != head->val) return false;
+            newnode = newnode->next;
             head = head->next;
         }
         return true;
