@@ -1,21 +1,22 @@
 class Solution {
 public:
     int trap(vector<int>& height) {
+        int ans = 0;
         int n = height.size();
         int lsf[100000];
-        lsf[0] = height[0];
-        for(int i =1 ; i< n ; i++){
-            lsf[i] = max(lsf[i-1],height[i]);
+         int rsf[100000];
+
+        lsf[n-1] = height[n-1];
+        for(int i =n-2; i>=0 ; i--){
+            lsf[i] = max(lsf[i+1],height[i]);
         }
-        int rsf[100000];
-        rsf[n-1] = height[n-1];
-        for(int i = n-2; i>=0 ; i--){
-            rsf[i] = max(rsf[i+1],height[i]);
+        rsf[0]=height[0];
+        for(int i=1;i<=n-1;i++){
+            rsf[i] = max(rsf[i-1],height[i]);
         }
-        int totalwater =0;
-        for(int i =0;i<n ; i++){
-            totalwater += min(lsf[i],rsf[i])-height[i];
+        for(int i =0;i<n;i++){
+            ans+=min(rsf[i],lsf[i])-height[i];
         }
-        return totalwater;
+        return ans;
     }
 };
