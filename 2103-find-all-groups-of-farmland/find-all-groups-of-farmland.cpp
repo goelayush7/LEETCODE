@@ -1,3 +1,4 @@
+#pragma GCC optimize("O3", "unroll-loops")
 class Solution {
 public:
     void bfs(vector<vector<int>>& land ,vector<vector<int>>& vis,int row,int col,vector<vector<int>>&ans){
@@ -14,18 +15,28 @@ public:
             q.pop();
             int drow[] = {-1, 0, +1, 0};
             int dcol[] = {0, +1, 0, -1};
+            if((r+1 > n-1 || land[r+1][col]==0) && (c+1 > m-1 || land[r][c+1]==0)){
+                ans.push_back({startrow,startcol,r,c});
+            }
+            // int minrow = r;
+            // int mincol = c;
+            // int maxrow =r;
+            // int maxcol = c;
             for(int i = 0; i < 4; i++){
                 int nrow = r + drow[i];
                 int ncol = c + dcol[i];
                 if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < m && land[nrow][ncol]==1 && !vis[nrow][ncol]){
                     q.push({nrow,ncol});
                     vis[nrow][ncol] = 1;
+                    // minrow = min(r,nrow);
+                    // mincol = min(c,mincol);
+                    // maxrow = max(r,nrow);
+                    // maxcol = max(c,ncol);
                 }
             }
-            if((r+1 > n-1 || land[r+1][col]==0) && (c+1 > m-1 || land[r][c+1]==0)){
-                ans.push_back({startrow,startcol,r,c});
-            }
+            
         }
+
     }
     vector<vector<int>> findFarmland(vector<vector<int>>& land) {
         vector<vector<int>> ans;
