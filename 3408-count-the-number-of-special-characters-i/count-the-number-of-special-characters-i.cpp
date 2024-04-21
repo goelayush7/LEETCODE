@@ -13,7 +13,7 @@ public:
         }
         int m  = f.size();
         for(int i = 0;i<m;i++){
-            for(int j = 0 ; j<m ;j++){
+            for(int j = i ; j<m ;j++){
                 if(f[i]+32==f[j]){
                     count++;
 
