@@ -1,44 +1,48 @@
 class Solution {
 public:
     vector<int> findMinHeightTrees(int n, vector<vector<int>>& edges) {
-        if (n == 1) return {0};
-    
-        std::vector<std::list<int>> adjacency_list(n);
-        std::vector<int> degree(n, 0);
-        for (auto& edge : edges) {
-            int u = edge[0], v = edge[1];
-            adjacency_list[u].push_back(v);
-            adjacency_list[v].push_back(u);
-            degree[u]++;
-            degree[v]++;
+        vector<int> res;
+        if (n == 1) {
+            res.push_back(0);
+            return res;
         }
-        
-        std::queue<int> leaves;
+        vector<int> deg(n, 0);
+        vector<vector<int>> graph(n);
+        queue<int> q;
+
+        for (auto e : edges) {
+            deg[e[0]]++;
+            deg[e[1]]++;
+            graph[e[0]].push_back(e[1]);
+            graph[e[1]].push_back(e[0]);
+        }
+
         for (int i = 0; i < n; ++i) {
-            if (degree[i] == 1) leaves.push(i);
+            if (deg[i] == 1) {
+                q.push(i);
+            }
         }
-        
-        int remainingNodes = n;
-        while (remainingNodes > 2) {
-            int leavesCount = leaves.size();
-            remainingNodes -= leavesCount;
-            for (int i = 0; i < leavesCount; ++i) {
-                int leaf = leaves.front();
-                leaves.pop();
-                for (int neighbor : adjacency_list[leaf]) {
-                    if (--degree[neighbor] == 1) {
-                        leaves.push(neighbor);
+
+        while (n > 2) {
+            int sz = q.size();
+            n -= sz;
+            for (int i = 0; i < sz; ++i) {
+                int ele = q.front();
+                q.pop();
+                for (auto it : graph[ele]) {
+                    deg[it]--;
+                    if (deg[it] == 1) {
+                        q.push(it);
                     }
                 }
             }
         }
-        
-        std::vector<int> result;
-        while (!leaves.empty()) {
-            result.push_back(leaves.front());
-            leaves.pop();
+
+        while (!q.empty()) {
+            res.push_back(q.front());
+            q.pop();
         }
         
-        return result;
+        return res;
     }
 };
