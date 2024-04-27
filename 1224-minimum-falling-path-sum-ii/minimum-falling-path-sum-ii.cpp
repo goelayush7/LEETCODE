@@ -1,31 +1,38 @@
 class Solution {
 public:
-    int minFallingPathSum(vector<vector<int>>& grid) {
-        int n = grid.size(), res = INT_MAX;
-        vector<vector<int>> dp(n, vector<int>(n, -1));
-
-        for(int j = 0; j < n; ++j) {
-            dp[0][j] = grid[0][j];
-        }
-
-        for(int i = 1; i < n; ++i) {
-            for(int j = 0; j < n; ++j) {
-                int temp = INT_MAX;
-
-                for(int k = 0; k < n; ++k) {
-                    if(k != j) {
-                        temp = min(temp, grid[i][j] + dp[i - 1][k]);
-                    }
-
-                    dp[i][j] = temp;
+    int solve(std::vector<std::vector<int>>& dp, std::vector<std::vector<int>>& grid, int row, int prevcol) {
+        int n = grid.size();
+        if (row == n - 1) {
+            int temp = INT_MAX;
+            for (int i = 0; i < n; i++) {
+                if (i != prevcol) {
+                    temp = std::min(temp, grid[row][i]);
                 }
             }
+            return temp;
         }
+        if(dp[row][prevcol]!=-1)return dp[row][prevcol];
+        int mini = INT_MAX; // Initialize mini to INT_MAX
 
-        for(int j = 0; j < n; ++j) {
-            res = min(res, dp[n - 1][j]);
+        for (int i = 0; i < n; i++) {
+            if (i != prevcol) {
+                int minii = grid[row][i] + solve(dp, grid, row + 1, i);
+                mini = std::min(minii, mini);
+            }
         }
+        return dp[row][prevcol] = mini;
+    }
 
-        return res;
+    int minFallingPathSum(std::vector<std::vector<int>>& grid) {
+        int n = grid.size();
+        int ans = INT_MAX; // Initialize ans to INT_MAX
+        std::vector<std::vector<int>> dp(n, std::vector<int>(n, -1));
+        if(n==1){
+            return grid[0][0];
+        }
+        for (int i = 0; i < n; i++) {
+            ans = std::min(solve(dp, grid, 0, i), ans);
+        }
+        return ans;
     }
 };
