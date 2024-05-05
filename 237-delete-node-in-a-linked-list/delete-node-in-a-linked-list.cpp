@@ -17,6 +17,5 @@ public:
         else{
             node->next = NULL;
         }
-     
     }
 };
