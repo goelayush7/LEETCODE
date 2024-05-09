@@ -6,7 +6,7 @@ public:
         long long sum = 0;
         int minusterm = 1;
         sort(happiness.begin(),happiness.end());
-        while(k!=0){
+        while(k!=0 && end>=0){
             if(happiness[end]>0){
                 sum+=happiness[end];
             }
