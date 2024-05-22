@@ -6,14 +6,17 @@ public:
         for(int i =0;i<n;i++){
             maps[nums[i]]++;
         }
-        priority_queue<pair<int, int>> pq;
+        vector<vector<int>>out;
         for(auto it:maps){
-            pq.push({it.second,it.first});
+            out.push_back({it.second,it.first});
         }
+        sort(out.begin(),out.end());
+        reverse(out.begin(),out.end());
         vector<int>ans;
+        int i=0;
         while(k){
-            ans.push_back(pq.top().second);
-            pq.pop();
+            ans.push_back(out[i][1]);
+            i++;
             k--;
         }
         return ans;
