@@ -1,45 +1,40 @@
 class Solution {
 public:
-    int n;
-
-    bool f(int d, vector<int>& bloomDay, int m, int k) {
-        int len = 0, bouquet = 0;
-        for (int i = 0; i < n; i++) {
-            if (bloomDay[i] <= d) {
-                len++;// length for the adjacent blooming flowers
-                if (len == k) {
-                    bouquet++;// can make a bouquet
-                    len = 0;// reset
+    bool helper(int mid, vector<int>& bloomDay, int m, int k) {
+        int cons = 0;
+        int count = 0;
+        for (int i = 0; i < bloomDay.size(); i++) {
+            if (bloomDay[i] <= mid) {
+                cons++;
+                if (cons == k) {
+                    count++;
+                    cons = 0;
                 }
-            } 
-            else len = 0;//reset
-
-            if (bouquet >= m) return 1;// already more than m bouquets
+            } else {
+                cons = 0;
+            }
         }
-        return bouquet >= m;
+        return count >= m;
     }
 
     int minDays(vector<int>& bloomDay, int m, int k) {
-        n = bloomDay.size();
+      int n = bloomDay.size();
         if ((long long)m * k > n) return -1;
 
-        auto [x0, xN] = minmax_element(bloomDay.begin(), bloomDay.end());
-        int l = *x0, r = *xN, mid;
 
-        while (l < r) {
-            mid = l + (r - l) / 2;
-            if (f(mid, bloomDay, m, k))
-                r = mid;
-            else
-                l = mid + 1;
+        int start = *min_element(bloomDay.begin(), bloomDay.end());
+        int end = *max_element(bloomDay.begin(), bloomDay.end());
+        int mini = INT_MAX;
+
+        while (start <= end) {
+            int mid = start + (end - start) / 2;
+            if (helper(mid, bloomDay, m, k)) {
+                mini = mid;
+                end = mid - 1;
+            } else {
+                start = mid + 1;
+            }
         }
-        return l;
+        return mini;
     }
 };
-
-auto init = []() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-    cout.tie(nullptr);
-    return 'c';
-}();
