@@ -1,24 +1,19 @@
 class Solution {
 public:
     int getLucky(string s, int k) {
-        int n = s.size();
-        string total;
-        for(int i =0;i<n;i++){
-            int val = s[i]-'a'+1;
-            total+=to_string(val);
+           string n;
+        for(char x:s){
+            int m =  x -'a'+1;
+            n+=to_string(m);
         }
-        int ans = 0;
         while(k>0){
-            int value = 0;
-            for(int i =0;i<total.size();i++){
-                value+=int(total[i])-48;
+            int t=0;
+            for(char x : n){
+                t+=x-'0';
             }
-            total = to_string(value);
-            ans=value;
+            n=to_string(t);
             k--;
         }
-        return ans;
-
-        
+            return stoi(n);
     }
 };
