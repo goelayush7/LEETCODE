@@ -22,12 +22,10 @@ public:
         return cur;
     }
     ListNode* insertGreatestCommonDivisors(ListNode* head) {
-        ListNode* ans = head;
         ListNode* cur = head;
         ListNode* prev = nullptr;
         while(cur->next!=NULL){
             int div = greatestdivisor(cur,cur->next);
-            cout<<div;
             ListNode* temp = new ListNode(div);
             ListNode* temp1 = cur->next;
             cur->next = temp;
