@@ -9,8 +9,8 @@ public:
                 vector<int> left_results  = solve(s.substr(0, i));
                 vector<int> right_results = solve(s.substr(i+1));
 
-                for(int &x : left_results) {
-                    for(int &y : right_results) {
+                for(int x : left_results) {
+                    for(int y : right_results) {
                         if(s[i] == '+') {
                             result.push_back(x+y);
                         } else if(s[i] == '-') {
