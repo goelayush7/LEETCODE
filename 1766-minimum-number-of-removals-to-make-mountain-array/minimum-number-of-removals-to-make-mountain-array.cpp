@@ -25,7 +25,7 @@ public:
         int maxMountainLength = 0;
 
         // Find the maximum mountain length
-        for (int i = 1; i < n - 1; ++i) {
+        for (int i = 0; i < n ; ++i) {
             if (LIS[i] > 1 && LDS[i] > 1) {  // Valid peak
                 maxMountainLength = max(maxMountainLength, LIS[i] + LDS[i] - 1);
             }
