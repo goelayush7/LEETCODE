@@ -1,37 +1,20 @@
 class Solution {
 public:
     int lengthOfLongestSubstring(string s) {
-    int n = s.size();
-
-	int i = 0; // to store the start of the window
-	int j = 0; // to store the end of the windw
-
-	int max_len = 0; // to track the  length of the longest substring
-	// i.e. window that contain no unique characters
-
-	unordered_map<char, int> freqMap; // to store a  mapping  between characters
-	// present in a window & their frequencies
-
-	while (j < n) {
-
-		// expand the window
-		freqMap[s[j]]++;
-
-		// check for the violation of the window property
-		if (freqMap[s[j]] > 1) {
-			while (freqMap[s[j]] > 1) {
-				freqMap[s[i]]--;
-				i++;
-			}
-		}
-
-		// update the answer
-		max_len = max(max_len, j - i + 1);
-
-		// continue expansion of the window
-		j++;
-	}
-    return max_len;
+        int i =0;
+        int j =0;
+        int n = s.size();
+        unordered_map<int,int>maps;
+        int maxi = 0;
+        while(j<n){
+            maps[s[j]]++;
+            while(maps[s[j]]>1){
+                maps[s[i]]--;
+                i++;
+            }
+            maxi = max(maxi,j-i+1);
+            j++;
+        }
+        return maxi;
     }
-
 };
