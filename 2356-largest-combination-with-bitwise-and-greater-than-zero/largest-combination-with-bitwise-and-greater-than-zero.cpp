@@ -4,7 +4,7 @@ public:
         unordered_map<int,int>maps;
         for(int i =0;i<candidates.size();i++){
             int num = candidates[i];
-            for(int j=0;j<32;j++){
+            for(int j=0;j<24;j++){
                 if(num & (1<<j)){
                     maps[j]++;
                 }
