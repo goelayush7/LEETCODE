@@ -1,28 +1,28 @@
 class Solution {
 public:
     vector<int> resultsArray(vector<int>& nums, int k) {
-        int n = nums.size();
-        vector<int> ans;
-        
-        for (int i = 0; i <= n - k; i++) {
-            bool flag = true;
-            int maxi = nums[i];
-            
-            for (int j = 1; j < k; j++) {
-                if (nums[i + j] != nums[i + j - 1] + 1) {
-                    flag = false;
-                    break;
+        int n=nums.size();
+        vector<int>res;
+        deque<int>deq;
+        for(int i=0;i<n;++i){
+            if(!deq.empty() and deq.front()<=i-k){
+                deq.pop_front();
+            }
+            while(!deq.empty() and nums[deq.back()] != nums[i]-1){
+                deq.pop_back();
+            }
+            deq.push_back(i);
+            if(i>=k-1){
+                if(deq.size()==k){
+                    res.push_back(nums[deq.back()]);
+                } else {
+                    res.push_back(-1);
                 }
-                maxi = max(maxi, nums[i + j]);
             }
-            
-            if (!flag) {
-                ans.push_back(-1);
-            } else {
-                ans.push_back(maxi);
-            }
+
+
         }
+        return res;
         
-        return ans;
     }
 };
