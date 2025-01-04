@@ -1,38 +1,36 @@
 class Solution {
 public:
     vector<int> searchRange(vector<int>& nums, int target) {
-        int first =-1;
-        int second = -1;
-        int start = 0;
-        int high = nums.size()-1;
-        while(start<=high){
-            int mid = (start+high)/2;
-            if(nums[mid]==target){
-                first=mid;
-                high = mid-1;
+        int mini = -1, maxi = -1;
+
+        // Find the first occurrence of target
+        int start = 0, end = nums.size() - 1;
+        while (start <= end) {
+            int mid = start + (end - start) / 2;
+            if (nums[mid] == target) {
+                mini = mid; // Update mini
+                end = mid - 1; // Search in the left half
+            } else if (nums[mid] < target) {
+                start = mid + 1;
+            } else {
+                end = mid - 1;
             }
-            else if(nums[mid]>target){
-                high = mid-1;
-            }
-            else start = mid+1;
         }
-        start = 0;
-        high = nums.size()-1;
-        while(start<=high){
-            int mid = (start+high)/2;
-            if(nums[mid]==target){
-                second = mid;
-               start = mid+1;
+
+        // Find the last occurrence of target
+        start = 0, end = nums.size() - 1;
+        while (start <= end) {
+            int mid = start + (end - start) / 2;
+            if (nums[mid] == target) {
+                maxi = mid; // Update maxi
+                start = mid + 1; // Search in the right half
+            } else if (nums[mid] < target) {
+                start = mid + 1;
+            } else {
+                end = mid - 1;
             }
-            else if(nums[mid]>target){
-                high = mid-1;
-            }
-            else start = mid+1;
         }
-        vector<int>ans;
-        ans.push_back(first);
-        ans.push_back(second);
-        return ans;
-        
+
+        return {mini, maxi};
     }
 };
