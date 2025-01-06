@@ -1,31 +1,26 @@
 class Solution {
 public:
-    bool canbedone(vector<int>piles,int h,int k){
-        int curcount =0;
+    bool trial(vector<int>&piles,int h,int mid){
+        long long ans = 0;
         for(auto it : piles){
-            curcount += (it + k - 1) / k;
-            if(curcount>h)return false;
+            ans += (it + mid - 1) / mid;
         }
-        return curcount<=h;
+        return ans<=h;
     }
     int minEatingSpeed(vector<int>& piles, int h) {
-        int start = 1;
-        int end = *max_element(piles.begin(), piles.end());
-        for(auto it : piles){
-            end = max(end,it);
-        }
-        int ans =end;
+        int start =1;
+        int end = *max_element(piles.begin(),piles.end());
+        int ans = 0;
         while(start<=end){
             int mid = start + (end-start)/2;
-            bool val = canbedone(piles,h,mid);
-            if(val){
+            bool flag = trial(piles,h,mid);
+            if(flag==true){
                 ans = mid;
                 end = mid-1;
             }
-            else{
-                start = mid+1;
-            }
+            else start = mid+1;
         }
-        return ans;
+    return ans;
+
     }
 };
