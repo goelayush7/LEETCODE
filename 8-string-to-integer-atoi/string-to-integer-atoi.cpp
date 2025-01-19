@@ -1,34 +1,48 @@
 class Solution {
 public:
-    int myAtoi(string s) {
-        unordered_map<char, int> maps;
-        for (int i = 0; i < 10; i++) {
-            maps['0' + i] = i;
-        }
-        int n = s.size();
-        int index=0;
-        while(index<n && s[index]==' '){
-            index++;
-        }
-        bool negative =false;
-        if(index<n && s[index]=='-'){
-            negative=true;
-            index++;
-        }
-        if(index<n && s[index]=='+' && negative==false){
-            index++;
-        }
-        int num=0;
-        while(index<n && maps.find(s[index])!=maps.end()){
-           int digit = maps[s[index]];
-           if (num > (INT_MAX - maps[s[index]]) / 10) {
-                return negative ? INT_MIN : INT_MAX;
-            }
-            num = num*10+digit;
-            index++;
-        }
-        if(negative) return -num;
-        return num;
+  int myAtoi(string s) {
+      
+    const int len = s.size();
+
+    if(len == 0){
+        return 0;
+    }
+
+    int index = 0;
+    while(index < len && s[index] == ' '){
+        ++index;
+    }
+    bool isNegative = false;
+
+    if(index < len){
+
+      if(s[index] == '-'){
+        isNegative = true;
+        ++index;
+      } else if (s[index] == '+'){
+          ++index;
+      }
 
     }
+
+    int result = 0;
+    while(index < len && isDigit(s[index])){
+      int digit = s[index] - '0';
+
+      if(result > (INT_MAX / 10) || (result == (INT_MAX / 10) && digit > 7)){
+          return isNegative ? INT_MIN : INT_MAX;
+      }
+
+      result = (result * 10) + digit; 
+
+      ++index;
+    }
+      
+    return isNegative ? -result : result;
+  }
+    
+private:
+  bool isDigit(char ch){
+    return ch >= '0' && ch <= '9';
+  }
 };
