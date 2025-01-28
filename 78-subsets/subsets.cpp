@@ -1,25 +1,17 @@
-// Bit Manipulation
-// Time complexity : O(N*(2^N))
-// Space complexity : O(N*(2^N))
 class Solution {
 public:
-    vector<vector<int>> subsets(vector<int>& nums) {
-        vector<vector<int>> ans;
-        int n = nums.size();
-        int num = pow(2, n), i = 0;
-        
-        while(i<num)
-        {
-            vector<int> temp;
-            for(int j=0; j<n; j++)
-            {
-                if(i & 1<<j)
-                    temp.push_back(nums[j]);
-            }
-            ans.push_back(temp);
-            i++;
+    void subset(vector<int>&nums,int i,vector<vector<int>>&out,vector<int>ans){
+        out.push_back(ans);
+        for(int j = i;j<nums.size();j++){
+            ans.push_back(nums[j]);
+            subset(nums,j+1,out,ans);
+            ans.pop_back();
         }
-        
-        return ans;
+    }
+    vector<vector<int>> subsets(vector<int>& nums) {
+        vector<vector<int>>out;
+        vector<int>ans;
+        subset(nums,0,out,ans);
+        return out;
     }
 };
