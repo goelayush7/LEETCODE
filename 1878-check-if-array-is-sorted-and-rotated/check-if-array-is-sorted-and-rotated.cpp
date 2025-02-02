@@ -1,16 +1,29 @@
 class Solution {
 public:
     bool check(vector<int>& nums) {
+        int pivot = 0;
         int n = nums.size();
-        vector<int>copy = nums;
-        sort(nums.begin(),nums.end());
-        for(int i =0;i<n;i++){
-            vector<int>temp;
-            for(int j = 0;j<n;j++){
-                temp.push_back(copy[(j+i)%n]);
+        
+        for (int i = 0; i < n - 1; i++) {
+            if (nums[i] > nums[i + 1]) {
+                pivot = i + 1;
+                break;
             }
-            if(temp==nums)return true;
         }
-        return false;
+        
+        vector<int> ans;
+        for (int i = pivot; i < n; i++) {
+            ans.push_back(nums[i]);
+        }
+        for (int i = 0; i < pivot; i++) {
+            ans.push_back(nums[i]);
+        }
+
+        for (int i = 0; i < n - 1; i++) {
+            if (ans[i] > ans[i + 1]) {
+                return false;
+            }
+        }
+        return true;
     }
 };
