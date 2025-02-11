@@ -1,29 +1,23 @@
 class Solution {
 public:
     string removeOccurrences(string s, string part) {
-        stack<char> st;
-        int partSize = part.size();
-        
-        for (char c : s) {
-            st.push(c);
-
-            // Check if the last 'partSize' characters in stack match 'part'
-            if (st.size() >= partSize) {
+        char last = part[part.size()-1];
+        stack<char>st;
+        for(int i =0;i<s.size();i++){
+            st.push(s[i]);
+            if(s[i]==last){
                 string temp = "";
-                for (int i = 0; i < partSize; i++) {
-                    temp = st.top() + temp;  // Construct the string correctly
+                while(!st.empty() && temp.size()!=part.size()){
+                    temp = st.top() + temp;
                     st.pop();
                 }
-                
-                if (temp != part) {
-                    for (char ch : temp) {
-                        st.push(ch);
+                if(temp!=part){
+                    for(int i  =0 ;i<temp.size();i++){
+                        st.push(temp[i]);
                     }
                 }
             }
         }
-
-        // Convert stack to result string
         string result = "";
         while (!st.empty()) {
             result = st.top() + result;
