@@ -1,27 +1,22 @@
 class Solution {
 public:
-    bool helper(vector<string>&nums,string &ans,unordered_set<string>st){
-        if(ans.size()==nums[0].size()){
-            if(st.find(ans)==st.end()){
-                return true;
-            }
-            return false;
+    bool helper(vector<string>& nums, string &ans, const unordered_set<string>& st) {
+        if (ans.size() == nums[0].size()) {
+            return st.find(ans) == st.end(); 
         }
-        //add one
-        ans.push_back('1');
-        if(helper(nums,ans,st))return true;
-        ans.pop_back();
-        ans.push_back('0');
-        if(helper(nums,ans,st))return true;
+
+        for (char c : {'0', '1'}) {
+            ans.push_back(c);
+            if (helper(nums, ans, st)) return true;
+            ans.pop_back(); 
+        }
         return false;
     }
+
     string findDifferentBinaryString(vector<string>& nums) {
-        string temp = "1";
-        unordered_set<string>st(nums.begin(),nums.end());
-        if(helper(nums,temp,st))return temp;
-        temp ="0";
-        if(helper(nums,temp,st))return temp;
-        return temp;
-        
+        unordered_set<string> st(nums.begin(), nums.end());
+        string ans;
+        helper(nums, ans, st);
+        return ans;
     }
 };
