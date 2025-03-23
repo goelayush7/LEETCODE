@@ -2,42 +2,47 @@ class Solution {
 public:
     int countPaths(int n, vector<vector<int>>& roads) {
         const int MOD = 1e9 + 7;
-        unordered_map<int, vector<pair<int, int>>> adj;
-        
-        // Build the adjacency list
-        for (auto road : roads) {
-            adj[road[0]].push_back({road[1], road[2]});
-            adj[road[1]].push_back({road[0], road[2]});
+        vector<vector<pair<int, int>>> adj(n);
+
+        for (auto& it : roads) {
+            int u = it[0];
+            int v = it[1];
+            int wt = it[2];
+            adj[u].push_back({v, wt});
+            adj[v].push_back({u, wt});
         }
-        
-        // Min-heap to store (distance, node)
+
+        vector<int> steps(n, 0);
+        vector<long long> dis(n, LLONG_MAX); // Fixed to long long
+        dis[0] = 0;
+        steps[0] = 1;
+
         priority_queue<pair<long long, int>, vector<pair<long long, int>>, greater<pair<long long, int>>> pq;
         pq.push({0, 0});
-        
-        vector<long long> dis(n, LLONG_MAX);
-        vector<int> ways(n, 0);
-        dis[0] = 0;
-        ways[0] = 1;
-        
+
         while (!pq.empty()) {
-            auto [distance, node] = pq.top();
+            auto [weight, node] = pq.top();
             pq.pop();
             
-            if (distance > dis[node]) continue;
-            
-            for (auto [newnode, newdis] : adj[node]) {
-                long long totalDistance = distance + newdis;
-                
-                if (totalDistance < dis[newnode]) {
-                    dis[newnode] = totalDistance;
-                    pq.push({totalDistance, newnode});
-                    ways[newnode] = ways[node];
-                } else if (totalDistance == dis[newnode]) {
-                    ways[newnode] = (ways[newnode] + ways[node]) % MOD;
+            if (weight > dis[node]) continue;
+
+            for (auto& it : adj[node]) {
+                int newnode = it.first;
+                int newwt = it.second;
+
+                // Update if the new distance is shorter
+                if (dis[newnode] > weight + newwt) {
+                    dis[newnode] = weight + newwt;
+                    steps[newnode] = steps[node];
+                    pq.push({dis[newnode], newnode});
+                }
+                // If the distance is the same, add the number of ways
+                else if (dis[newnode] == weight + newwt) {
+                    steps[newnode] = (steps[newnode] + steps[node]) % MOD;
                 }
             }
         }
-        
-        return ways[n - 1];
+
+        return steps[n - 1];
     }
 };
