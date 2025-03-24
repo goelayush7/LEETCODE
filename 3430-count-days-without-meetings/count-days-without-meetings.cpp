@@ -1,22 +1,23 @@
 class Solution {
 public:
     int countDays(int days, vector<vector<int>>& meetings) {
-        sort(meetings.begin(),meetings.end());
-        vector<vector<int>>vect;
-        for(auto it : meetings){
-            if(vect.empty() || vect.back()[1]<it[0]){
-                vect.push_back(it);
-            }
-            else{
-                vect.back()[1] = max(vect.back()[1],it[1]);
-            }
-        }
-        sort(vect.begin(),vect.end());
-        int total = 0;
-        for(auto it : vect){
+        sort(meetings.begin(), meetings.end());
+        int count = 0;
+        int ini = 0;  // Initialize to 0
+        int n = meetings.size();
 
-            total+=it[1]-it[0]+1;
+        for (int i = 0; i < n; i++) {
+            if ((meetings[i][0] - ini - 1) > 0) {
+                count += meetings[i][0] - ini - 1;
+            }
+            ini = max(ini, meetings[i][1]);
         }
-        return days-total;
+
+        // Account for remaining days
+        if (days > ini) {
+            count += days - ini;
+        }
+        
+        return count;
     }
 };
