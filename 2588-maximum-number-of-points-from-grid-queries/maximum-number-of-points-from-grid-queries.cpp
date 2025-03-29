@@ -1,59 +1,44 @@
 class Solution {
 public:
     vector<int> maxPoints(vector<vector<int>>& grid, vector<int>& queries) {
-        int rowCount = grid.size(), colCount = grid[0].size();
-        vector<int> result(queries.size(), 0);
-        // Directions for movement (right, down, left, up)
-        vector<pair<int, int>> DIRECTIONS = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
-
-        // Store queries along with their original indices to restore order
-        // later
-        vector<pair<int, int>> sortedQueries;
-        for (int index = 0; index < queries.size(); index++) {
-            sortedQueries.push_back({queries[index], index});
+        int m = grid.size();
+        int n = grid[0].size();
+        vector<int> ans(queries.size(), -1);
+        int drow[] = {0,-1,0,1};
+        int dcol[] = {-1,0,1,0};
+        vector<pair<int, int>> sq;
+        for (int i = 0; i < queries.size(); i++) {
+            sq.push_back({queries[i], i});
         }
-        // Sort queries by value in ascending order
-        sort(sortedQueries.begin(), sortedQueries.end());
-
-        // Min-heap (priority queue) to process cells in increasing order of
-        // value
+        sort(sq.begin(), sq.end());
+        int totalcount =0;
         priority_queue<pair<int, pair<int, int>>,
                        vector<pair<int, pair<int, int>>>, greater<>>
-            minHeap;
-        vector<vector<bool>> visited(rowCount, vector<bool>(colCount, false));
-        // Keeps track of the number of cells processed
-        int totalPoints = 0;
-        // Start from the top-left cell
-        minHeap.push({grid[0][0], {0, 0}});
-        visited[0][0] = true;
+            pq;
+        vector<vector<int>>vis(m,vector<int>(n,-1));
+        vis[0][0] =1;
+        pq.push({grid[0][0],{0,0}});
+        for(auto [number,index] : sq){
 
-        // Process queries in sorted order
-        for (auto [queryValue, queryIndex] : sortedQueries) {
-            // Expand the cells that are smaller than the current query value
-            while (!minHeap.empty() && minHeap.top().first < queryValue) {
-                auto [cellValue, position] = minHeap.top();
-                minHeap.pop();
-                int currentRow = position.first, currentCol = position.second;
-                // Increment count of valid cells
-                totalPoints++;
-
-                // Explore all four possible directions
-                for (auto [rowOffset, colOffset] : DIRECTIONS) {
-                    int newRow = currentRow + rowOffset,
-                        newCol = currentCol + colOffset;
-
-                    // Check if the new cell is within bounds and not visited
-                    if (newRow >= 0 && newCol >= 0 && newRow < rowCount &&
-                        newCol < colCount && !visited[newRow][newCol]) {
-                        minHeap.push({grid[newRow][newCol], {newRow, newCol}});
-                        // Mark as visited
-                        visited[newRow][newCol] = true;
+            while(!pq.empty() && pq.top().first<number){
+                auto top = pq.top();
+                pq.pop();
+                int num = top.first;
+                int row = top.second.first;
+                int col = top.second.second;
+                totalcount++;
+                for(int i =0;i<4;i++){
+                    int nrow = row+drow[i];
+                    int ncol = col+dcol[i];
+                    if(nrow>=0 && nrow<m && ncol>=0 && ncol<n && vis[nrow][ncol]==-1){
+                        pq.push({grid[nrow][ncol],{nrow,ncol}});
+                        vis[nrow][ncol] =1;
                     }
                 }
             }
-            // Store the result for this query
-            result[queryIndex] = totalPoints;
+            ans[index] = totalcount;
         }
-        return result;
+        return ans;
     }
+
 };
