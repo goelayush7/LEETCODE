@@ -11,14 +11,20 @@
  */
 class Solution {
 public:
-    TreeNode* insertIntoBST(TreeNode* root, int val) {
-        if(root==NULL)return new TreeNode(val);
-        if(root->val>val){
-            root->left = insertIntoBST(root->left,val);
+    TreeNode* helper(TreeNode* root,int val){
+        if(root==NULL){    //inserting at leaf nodes
+            return new TreeNode(val);
         }
-        else{
-            root->right = insertIntoBST(root->right,val);
+
+        if(root->val>val){
+            root->left = helper(root->left,val);
+        }
+        if(root->val<val){
+            root->right = helper(root->right,val);
         }
         return root;
+    }
+    TreeNode* insertIntoBST(TreeNode* root, int val) {
+        return helper(root,val);
     }
 };
