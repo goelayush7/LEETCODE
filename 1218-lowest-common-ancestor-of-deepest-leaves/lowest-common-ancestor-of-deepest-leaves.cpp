@@ -6,37 +6,27 @@
  *     TreeNode *right;
  *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
  *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left),
- * right(right) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
 class Solution {
 public:
-    unordered_map<int, int> maps;
-    int dmax = 0;
-    TreeNode* LCA(TreeNode* root) {
-        if (root == NULL || maps[root->val] == dmax) {
-            return root;
+    pair<int,TreeNode*> helper(TreeNode* root){
+        if(root==NULL){
+            return {0,NULL};
         }
-        TreeNode* lca1 = LCA(root->left);
-        TreeNode* lca2 = LCA(root->right);
-        if (lca1 != NULL && lca2 != NULL) {
-            return root;
+        auto lca1 = helper(root->left);
+        auto lca2 = helper(root->right);
+        if(lca1.first==lca2.first){
+            return {lca1.first+1,root};
         }
-        if (lca1 != NULL)
-            return lca1;
-        return lca2;
+        else if(lca1.first>lca2.first){
+            return {lca1.first+1,lca1.second};
+        }
+        else return {lca2.first+1,lca2.second};
     }
-    void depth(TreeNode* root, int d) {
-        if (root == NULL)
-            return;
-        maps[root->val] = d;
-        dmax = max(dmax, d);
-        depth(root->left, d + 1);
-        depth(root->right, d + 1);
-    }
-    TreeNode* lcaDeepestLeaves(TreeNode* root) {
-        depth(root,0);
-        return LCA(root);
+    TreeNode* lcaDeepestLeaves(TreeNode* root){
+        return helper(root).second;
+        
     }
 };
