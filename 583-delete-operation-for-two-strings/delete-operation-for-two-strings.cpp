@@ -4,9 +4,6 @@ public:
         if(index1>=word1.size() || index2>=word2.size()){
             return 0;
         }
-        if(index1==word1.size()-1 && index2==word2.size()-1){
-            return word1[index1]==word2[index2];
-        }
         if(dp[index1][index2]!=-1){
             return dp[index1][index2];
         }
