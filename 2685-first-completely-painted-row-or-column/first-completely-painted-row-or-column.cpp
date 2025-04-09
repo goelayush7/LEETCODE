@@ -1,26 +1,30 @@
 class Solution {
 public:
     int firstCompleteIndex(vector<int>& arr, vector<vector<int>>& mat) {
-        unordered_map<int,int>column;
-        unordered_map<int,int>row;
-        unordered_map<int,pair<int,int>>pos;
-        int n = mat.size();
-        int m = mat[0].size();
-        for(int i =0;i<n;i++){
-            for(int j =0;j<m;j++){
-                pos[mat[i][j]] = {i,j};
+        int m = mat.size();
+        int n = mat[0].size();
+        vector<pair<int, int>> vect(m*n+1);
+        vector<int>x(m,0);
+        vector<int>y(n,0);
+        for(int i =0;i<m;i++){
+            for(int j = 0;j<n;j++){
+                int num = mat[i][j];
+                vect[num] = {i,j};
             }
         }
-        for(int i =0;i<arr.size();i++){
-            int val = arr[i];
-            auto it  = pos[val];
-            int r = it.first;
-            int c = it.second;
-            row[r]++;
-            if(row[r]==m)return i;
-            column[c]++;
-            if(column[c]==n)return i;
-    }
-    return -1;
+        for(int i =0;i<m*n;i++){
+            auto it = vect[arr[i]];
+            int xc = it.first;
+            int yc = it.second;
+            x[xc]++;
+            if(x[xc]==n)return i;
+            y[yc]++;
+            if(y[yc]==m)return i;
+        }
+        return -1;
+
+        
+        return -1;
+
     }
 };
