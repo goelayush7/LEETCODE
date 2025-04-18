@@ -1,31 +1,26 @@
-#include <vector>
-#include <unordered_set>
-#include <cmath>
-#include <algorithm>
-using namespace std;
-
 class Solution {
 public:
     int longestSquareStreak(vector<int>& nums) {
-        unordered_set<long long> st(nums.begin(), nums.end()); // Initialize set with nums
-        int maxcount = 1;
+        unordered_map<int,int>maps;
+        int maxi = *max_element(nums.begin(),nums.end());
 
-        for (auto x : st) {
-            // Check if x is the beginning of a potential square streak
-            if (st.find((long long)sqrt(x)) == st.end() || sqrt(x) * sqrt(x) != x) {
-                int count = 1;
-                long long it = x;
-                
-                // Continue the streak by squaring `it` and checking if it's in the set
-                while (st.find(it * it) != st.end()) {
-                    count++;
-                    it = it * it;
-                }
-
-                maxcount = max(maxcount, count);
-            }
+        for(auto it : nums){
+            maps[it]++;
         }
-
-        return maxcount == 1 ? -1 : maxcount;
+        int maxc = 1;
+        for(int i = 0;i<nums.size();i++){
+            int num = nums[i];
+            int curc = 1;
+            while(1LL*num*num<=maxi){
+                if(maps.find(num*num)!=maps.end()){
+                    curc++;
+                    num = num*num;
+                }
+                else break;
+            }
+            maxc = max(maxc,curc);
+        }
+        if(maxc<2)return -1;
+        return maxc;
     }
 };
