@@ -1,34 +1,37 @@
 class Solution {
 public:
     int minTimeToReach(vector<vector<int>>& moveTime) {
-        int n = moveTime.size();
-        int m = moveTime[0].size();
-        vector<vector<int>> dis(n, vector<int>(m, 1e9+1000));
-        priority_queue<vector<int>, vector<vector<int>>, greater<vector<int>>>
-            pq;
-
-        pq.push({0, 0, 0}); // curvalue row col;
-        while (!pq.empty()) {
-            auto front = pq.top();
-            pq.pop();
-            int curvalu = front[0];
-            int row = front[1];
-            int col = front[2];
-            int drow[] = {0, -1, 0, 1};
-            int dcol[] = {-1, 0, 1, 0};
-            for (int i = 0; i < 4; i++) {
-                int nrow = row + drow[i];
-                int ncol = col + dcol[i];
-                if (nrow >= 0 && nrow < n && ncol >= 0 && ncol < m) {
-                    int newd = max(curvalu,moveTime[nrow][ncol])+1;
-                    if (dis[nrow][ncol] > newd) {
-                        dis[nrow][ncol] = newd;
-                        pq.push({newd, nrow, ncol});
+        int n=moveTime.size();
+        int m=moveTime[0].size();
+        priority_queue<pair<int,pair<int,int>>,vector<pair<int,pair<int,int>>>,greater<pair<int,pair<int,int>>>>qu; //{t,{r,c}}
+        vector<vector<int>>dist(n,vector<int>(m,INT_MAX));
+        dist[0][0]=0;
+        qu.push({0,{0,0}});
+        while(!qu.empty()){
+            int t=qu.top().first;
+            int row=qu.top().second.first;
+            int col=qu.top().second.second;
+            qu.pop();
+            if(row==n-1 && col==m-1) return t;
+            int drow[4]={0,-1,0,1};
+            int dcol[4]={-1,0,1,0};
+            for(int i=0;i<4;i++){
+                int n_row=row+drow[i];
+                int n_col=col+dcol[i];
+                
+                if(n_row>=0 && n_row<n && n_col>=0 && n_col<m ){
+                    int diff=max(t,moveTime[n_row][n_col])+1;
+                    
+                    if(diff<dist[n_row][n_col]){
+                        dist[n_row][n_col]=diff;
+                        qu.push({diff,{n_row,n_col}});
                     }
+                    
                 }
             }
         }
-            return dis[n-1][m-1];
-
+        
+        return -1;
+        
     }
 };
