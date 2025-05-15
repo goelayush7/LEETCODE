@@ -1,30 +1,33 @@
 class Solution {
 public:
     string removeKdigits(string num, int k) {
-        stack<char>st;
-        //checking if the right side is smaller than the left side;
-        for(int i =0;i<num.size();i++){
-            while(k>0 && !st.empty() && int(st.top())>int(num[i])){
+        stack<char> st;
+        for (char it : num) {
+            while (!st.empty() && st.top() > it && k > 0) {
                 st.pop();
                 k--;
             }
-            st.push(num[i]);
+            st.push(it);
         }
-        while(k>0 && !st.empty()){
+
+        while (k > 0 && !st.empty()) {
             st.pop();
             k--;
         }
-        string ans;
-        while(!st.empty()){
-            ans.push_back(st.top());
+
+        string temp;
+        while (!st.empty()) {
+            temp.push_back(st.top());
             st.pop();
         }
-        reverse(ans.begin(),ans.end());
-        int i  =0;
-        while(i<ans.size() && ans[i]=='0'){
+        reverse(temp.begin(), temp.end());
+
+        int i = 0;
+        while (i < temp.size() && temp[i] == '0') {
             i++;
         }
-        ans = ans.substr(i);
-        return ans.empty() ? "0" : ans;
+
+        string result = temp.substr(i);
+        return result.empty() ? "0" : result;
     }
 };
