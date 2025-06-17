@@ -1,36 +1,40 @@
 class Solution {
 public:
     int maxDistToClosest(vector<int>& seats) {
-        vector<int> left(seats.size(), INT_MAX);
-        int start = 1000000;
-        for (int i = 0; i < seats.size(); i++) {
-            if (seats[i] == 1) {
-                left[i] = 1e9;
-                start = 0;
-            } else {
-                start++;
-                left[i] = start;
+        int maxzeroes = 0;
+        int cur = 0;
+        // checking for first index;
+
+        if (seats[0] == 0) {
+            int i = 0;
+            while (seats[i] == 0) {
+                i++;
+                maxzeroes++;
             }
         }
-        vector<int> right(seats.size(), INT_MAX);
-        start = 1000000;
-        for (int i = seats.size() - 1; i >= 0; i--) {
-            if (seats[i] == 1) {
-                right[i] = 1e9;
-                start = 0;
-            } else {
-                start++;
-                right[i] = start;
-            }
+
+        int i = seats.size() - 1;
+        while (i >= 0 && seats[i] == 0) {
+            cur++;
+            i--;
         }
-        int finalans;
-        int ans = 0;
-        for (int i = 0; i < seats.size(); i++) {
-            if (seats[i] != 1) {
-                finalans = min(left[i], right[i]);
-                ans = max(ans, finalans);
-            }
+        maxzeroes = max(maxzeroes, cur);
+        cout<<maxzeroes;
+        int newmax = 0;
+        cur = 0;
+        for (auto it : seats) {
+            if (it == 0)
+                cur++;
+            else
+                cur = 0;
+            newmax = max(newmax, cur);
         }
-        return ans;
+        
+        if (newmax % 2 == 0) {
+            if(maxzeroes>newmax/2)return maxzeroes;
+            return newmax / 2;
+        }
+        if(maxzeroes>(newmax/2)+1)return maxzeroes;
+        return (newmax / 2) + 1;
     }
 };
