@@ -12,9 +12,7 @@
 class Solution {
 public:
     TreeNode* helper(vector<int>&nums,int start,int end){
-        if(start>end){
-            return NULL;
-        }
+        if(start>end)return NULL ;
         int mid = start + (end-start)/2;
         TreeNode* root = new TreeNode(nums[mid]);
         root->left = helper(nums,start,mid-1);
