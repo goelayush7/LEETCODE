@@ -10,30 +10,16 @@
  */
 class Solution {
 public:
-    int greatestdivisor(ListNode* head1,ListNode* head2){
-        int val1 = head1->val;
-        int val2 = head2->val;
-        int cur = 0;
-        for(int i =1;i<=min(val1,val2);i++){
-            if(val1%i==0 && val2%i==0){
-                cur = max(cur,i);
-            }
-        }
-        return cur;
-    }
     ListNode* insertGreatestCommonDivisors(ListNode* head) {
-        ListNode* cur = head;
-        ListNode* prev = nullptr;
-        while(cur->next!=NULL){
-            int div = greatestdivisor(cur,cur->next);
-            ListNode* temp = new ListNode(div);
-            ListNode* temp1 = cur->next;
-            cur->next = temp;
-            temp->next = temp1;
-            prev = cur->next;
-            cur = cur->next->next;
+        ListNode* temp = head;
+        ListNode* dummy = temp;
+        while(temp->next!=NULL){
+            ListNode* next = temp->next;
+            int val = gcd(temp->val,next->val);
+            temp->next = new ListNode(val);
+            temp->next->next = next;
+            temp = next;
         }
-        return head;
-
+        return dummy;
     }
 };
