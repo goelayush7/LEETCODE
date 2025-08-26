@@ -1,5 +1,25 @@
-# Write your MySQL query statement below
-Select S.user_id ,IFNULL(ROUND(Sum(case when C.action="confirmed" then 1 else 0 end)/Count(C.user_id),2),0) as confirmation_rate
-from Signups S left join Confirmations  C
-on S.user_id = C.user_id
-group by S.user_id
+WITH CTE AS (
+    SELECT 
+        S.USER_ID, 
+        COUNT(*) AS TOT
+    FROM SIGNUPS S
+    LEFT JOIN CONFIRMATIONS C 
+        ON S.USER_ID = C.USER_ID
+    GROUP BY S.USER_ID
+),
+CTE2 AS (
+    SELECT 
+        S.USER_ID,
+        COUNT(*) AS CONFI
+    FROM SIGNUPS S
+    LEFT JOIN CONFIRMATIONS C  
+        ON S.USER_ID = C.USER_ID
+    WHERE C.ACTION = 'confirmed'
+    GROUP BY S.USER_ID
+)
+SELECT 
+    C.USER_ID, 
+    ROUND(CAST(IFNULL(C1.CONFI,0) AS DECIMAL) / C.TOT, 2) AS CONFIRMATION_RATE
+FROM CTE C
+LEFT JOIN CTE2 C1 
+    ON C.USER_ID = C1.USER_ID;
