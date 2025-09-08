@@ -1,6 +1,13 @@
-with cte as (
-    select D.name as Department,E.name as Employee ,E.salary as salary,dense_rank() over(partition by D.id order by E.salary desc) as r
-    from Employee e join Department D on E.departmentId = D.id
+WITH cte AS (
+    SELECT 
+        id,
+        name,
+        salary,
+        departmentId,
+        DENSE_RANK() OVER (PARTITION BY departmentId ORDER BY salary desc) AS rn
+    FROM Employee
 )
-select Department , Employee ,Salary from cte 
-where r <=3
+SELECT D.name as Department,C.name as Employee,C.salary
+FROM cte C join Department  D
+on C.departmentId = D.id
+WHERE rn <= 3;
