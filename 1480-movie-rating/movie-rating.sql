@@ -1,14 +1,24 @@
-# Write your MySQL query statement below
--- select U.name from Users U join MovieRating m on U.user_id = m.user_id 
--- group by U.name 
+WITH CTE AS(
+    SELECT 
+        U.NAME,
+        U.USER_ID,
+        COUNT(M.USER_ID) AS CNT
+    FROM USERS U JOIN MOVIERATING M 
+    ON U.USER_ID = M.USER_ID
+    GROUP BY U.USER_ID,U.NAME
+)
+,RATING AS(
+    SELECT 
+        M.TITLE,
+        M.MOVIE_ID,
+        AVG(MO.RATING) AS AVERAGE
+    FROM MOVIES M JOIN MOVIERATING MO 
+    ON M.MOVIE_ID = MO.MOVIE_ID
+    WHERE MONTH(CREATED_AT) = '02' AND YEAR(CREATED_AT) = '2020'
+    GROUP BY M.TITLE,M.MOVIE_ID
+)
+(SELECT NAME AS RESULTS FROM CTE ORDER BY CNT DESC , NAME ASC LIMIT 1)
 
-(Select u.name as results from Users u left join MovieRating m on u.user_id = m.user_id 
-group by u.name 
-order by count(m.user_id) desc ,u.name
-limit 1)
-union all 
-(Select M.title as results from Movies M left join MovieRating m1 on M.movie_id = m1.movie_id
-where created_at like "2020-02%"
-group by M.title 
-order by avg(m1.rating) desc , M.title 
-limit 1)
+UNION ALL
+
+(SELECT TITLE AS RESULS FROM RATING ORDER BY AVERAGE DESC , TITLE ASC LIMIT 1)
